@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Nosso espaço especial — o site do nosso amor 💕" />
+  <title>💕 Nosso Amor</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Favicon emoji -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💕</text></svg>" />
+</head>
+<body>
+
+<!-- Camadas de fundo -->
+<div class="bg-layer" aria-hidden="true"></div>
+<div class="bg-overlay" aria-hidden="true"></div>
+<div class="hearts-container" id="hearts-container" aria-hidden="true"></div>
+
+<!-- Toast global -->
+<div class="toast" id="toast" role="alert" aria-live="polite"></div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" role="dialog" aria-label="Visualizar foto">
+  <button class="lightbox-close" id="lightbox-close" aria-label="Fechar">✕</button>
+  <img id="lightbox-img" src="" alt="Foto em tela cheia" />
+</div>
+
+<div id="app">
+
+  <!-- ==========================================
+       TELA DE LOGIN
+       ========================================== -->
+  <section id="screen-login" role="main" aria-label="Acesso ao site">
+    <div class="login-card">
+      <div class="login-logo">
+        <span class="heart-icon" aria-hidden="true">💕</span>
+        <h1>Nosso Amor</h1>
+        <p>Um espaço só para nós dois</p>
+      </div>
+
+      <form id="login-form" novalidate>
+        <div class="form-group">
+          <label for="login-username">Usuário</label>
+          <input
+            type="text"
+            id="login-username"
+            name="username"
+            placeholder="Digite seu usuário"
+            autocomplete="username"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="login-senha">Senha</label>
+          <div class="password-wrapper">
+            <input
+              type="password"
+              id="login-senha"
+              name="senha"
+              placeholder="Digite sua senha"
+              autocomplete="current-password"
+              required
+            />
+            <button type="button" id="btn-toggle-senha" class="btn-toggle-senha" aria-label="Mostrar senha">👁️</button>
+          </div>
+        </div>
+
+        <button type="submit" id="btn-login" class="btn-primary">
+          Entrar ✨
+        </button>
+
+        <p class="login-error" id="login-error" role="alert"></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       DASHBOARD
+       ========================================== -->
+  <div id="screen-dashboard" role="main" aria-label="Painel principal">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header-brand">
+        <span aria-hidden="true">💕</span>
+        Nosso Amor
+      </div>
+      <div class="header-user">
+        <div class="user-avatar" id="user-avatar" aria-hidden="true">?</div>
+        <span id="user-nome">...</span>
+        <button class="btn-logout" id="btn-logout" type="button">Sair</button>
+      </div>
+    </header>
+
+    <!-- Navegação por abas -->
+    <nav class="nav-tabs" role="tablist" aria-label="Seções do site">
+      <button class="nav-tab active" role="tab" aria-selected="true"  data-tab="cronometro"  aria-controls="tab-cronometro">
+        ⏱️ Nosso Tempo
+      </button>
+      <button class="nav-tab" role="tab" aria-selected="false" data-tab="fotos"       aria-controls="tab-fotos">
+        📸 Fotos
+      </button>
+      <button class="nav-tab" role="tab" aria-selected="false" data-tab="sentimentos" aria-controls="tab-sentimentos">
+        💌 Sentimentos
+      </button>
+    </nav>
+
+    <!-- ── ABA: Cronômetro ── -->
+    <section class="tab-content active" id="tab-cronometro" role="tabpanel" aria-label="Cronômetro do namoro">
+      <div class="timer-hero">
+        <p class="timer-subtitle">Juntos desde</p>
+        <p class="timer-date">8 de março de 2025 💕</p>
+
+        <div class="timer-grid" aria-label="Tempo juntos">
+          <div class="timer-unit">
+            <span class="timer-number" id="t-anos">00</span>
+            <span class="timer-label">Anos</span>
+          </div>
+          <div class="timer-unit">
+            <span class="timer-number" id="t-meses">00</span>
+            <span class="timer-label">Meses</span>
+          </div>
+          <div class="timer-unit">
+            <span class="timer-number" id="t-dias">00</span>
+            <span class="timer-label">Dias</span>
+          </div>
+          <div class="timer-unit">
+            <span class="timer-number" id="t-horas">00</span>
+            <span class="timer-label">Horas</span>
+          </div>
+          <div class="timer-unit">
+            <span class="timer-number" id="t-min">00</span>
+            <span class="timer-label">Minutos</span>
+          </div>
+          <div class="timer-unit">
+            <span class="timer-number" id="t-seg">00</span>
+            <span class="timer-label">Segundos</span>
+          </div>
+        </div>
+
+        <div class="timer-heart-row" aria-hidden="true">💗</div>
+
+        <div class="timer-total" aria-live="polite">
+          <span id="total-text">...</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ABA: Galeria de Fotos ── -->
+    <section class="tab-content" id="tab-fotos" role="tabpanel" aria-label="Galeria de fotos">
+      <h2 class="section-title">📸 Nossa Galeria</h2>
+      <p class="section-sub">Momentos especiais que vivemos juntos</p>
+
+      <!-- Zona de upload -->
+      <div class="upload-zone" id="upload-zone" role="button" tabindex="0" aria-label="Clique ou arraste fotos para enviar">
+        <div class="upload-zone-icon" aria-hidden="true">🖼️</div>
+        <h3>Adicionar fotos</h3>
+        <p>Clique aqui ou arraste e solte suas fotos<br/>(JPEG, PNG, GIF, WebP — máx. 10 MB)</p>
+        <input type="file" id="foto-input" accept="image/*" multiple aria-label="Selecionar fotos" />
+      </div>
+
+      <!-- Descrição + botão de enviar -->
+      <div class="upload-desc-row" id="upload-desc-row">
+        <input type="text" id="foto-desc" placeholder="Adicione uma legenda para a foto... (opcional)" maxlength="200" />
+        <button class="btn-send" id="btn-enviar-foto" type="button">📤 Enviar</button>
+        <button class="btn-send" id="btn-cancelar-foto" type="button" style="background: rgba(255,255,255,0.08); box-shadow: none;">Cancelar</button>
+      </div>
+
+      <!-- Barra de progresso -->
+      <div class="upload-progress" id="upload-progress">
+        <p style="font-size:0.85rem; color:var(--text-muted)">Enviando foto...</p>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="progress-fill"></div>
+        </div>
+      </div>
+
+      <!-- Grid de fotos -->
+      <div class="photos-grid" id="photos-grid" aria-label="Fotos do casal" aria-live="polite">
+        <div class="photos-empty">
+          <div class="empty-icon" aria-hidden="true">🌸</div>
+          <p>Carregando fotos...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ABA: Sentimentos ── -->
+    <section class="tab-content" id="tab-sentimentos" role="tabpanel" aria-label="Sentimentos do casal">
+      <h2 class="section-title">💌 O que estamos sentindo</h2>
+      <p class="section-sub">Um espaço para compartilhar o que nossos corações guardam</p>
+
+      <div class="feelings-layout">
+
+        <!-- Compor mensagem -->
+        <div class="feelings-compose" aria-label="Escrever sentimento">
+          <h3>✍️ Escrever para você</h3>
+
+          <!-- Seletor de emoji -->
+          <div class="emoji-picker" role="group" aria-label="Escolha um emoji">
+            <button class="emoji-btn selected" data-emoji="💕" type="button" aria-label="Corações">💕</button>
+            <button class="emoji-btn" data-emoji="❤️" type="button" aria-label="Coração">❤️</button>
+            <button class="emoji-btn" data-emoji="🥰" type="button" aria-label="Apaixonado">🥰</button>
+            <button class="emoji-btn" data-emoji="😍" type="button" aria-label="Encantado">😍</button>
+            <button class="emoji-btn" data-emoji="🌹" type="button" aria-label="Rosa">🌹</button>
+            <button class="emoji-btn" data-emoji="✨" type="button" aria-label="Brilho">✨</button>
+            <button class="emoji-btn" data-emoji="🌙" type="button" aria-label="Lua">🌙</button>
+            <button class="emoji-btn" data-emoji="🦋" type="button" aria-label="Borboleta">🦋</button>
+            <button class="emoji-btn" data-emoji="💭" type="button" aria-label="Pensamento">💭</button>
+            <button class="emoji-btn" data-emoji="🎵" type="button" aria-label="Música">🎵</button>
+          </div>
+
+          <textarea
+            class="feelings-textarea"
+            id="feeling-text"
+            placeholder="O que você está sentindo agora? Escreva para a pessoa mais especial da sua vida... 💕"
+            maxlength="2000"
+            aria-label="Mensagem de sentimento"
+          ></textarea>
+
+          <div class="feelings-char">
+            <span id="char-count">0</span>/2000
+          </div>
+
+          <button class="btn-send-feeling" id="btn-send-feeling" type="button">
+            <span>Enviar 💌</span>
+          </button>
+        </div>
+
+        <!-- Feed de mensagens -->
+        <div>
+          <div class="feelings-feed" id="feelings-feed" aria-label="Mensagens de sentimentos" aria-live="polite">
+            <div class="feelings-empty">
+              <div style="font-size:2rem; margin-bottom:8px">💭</div>
+              <p>Carregando mensagens...</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div><!-- /#screen-dashboard -->
+
+</div><!-- /#app -->
+
+<script src="app.js"></script>
+</body>
+</html>

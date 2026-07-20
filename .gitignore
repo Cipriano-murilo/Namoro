@@ -1,0 +1,9 @@
+# Ignorar fotos e arquivos enviados pelos usuários, mas manter o .htaccess da pasta segura
+uploads/*
+!uploads/.htaccess
+
+# Ignorar pastas de sistema/IDE
+.vscode/
+.gemini/
+.DS_Store
+Thumbs.db

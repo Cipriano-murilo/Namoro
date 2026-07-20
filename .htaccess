@@ -1,0 +1,15 @@
+# ============================================
+# .htaccess — Configurações do Apache (XAMPP)
+# ============================================
+
+# Permitir CORS para desenvolvimento local
+Header always set Access-Control-Allow-Origin "*"
+Header always set Access-Control-Allow-Methods "GET, POST, DELETE, OPTIONS"
+Header always set Access-Control-Allow-Headers "Content-Type"
+
+# Segurar sessões PHP
+php_value session.cookie_httponly 1
+php_value session.use_strict_mode 1
+
+# Desabilitar listagem de diretório
+Options -Indexes

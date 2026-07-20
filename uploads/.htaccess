@@ -1,0 +1,5 @@
+# Bloquear acesso direto aos uploads via browser (sem extensão PHP)
+Options -Indexes
+<FilesMatch "\.php$">
+  Deny from all
+</FilesMatch>
