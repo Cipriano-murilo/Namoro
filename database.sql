@@ -1,8 +1,4 @@
-CREATE DATABASE IF NOT EXISTS namoro_db
-  CHARACTER SET utf8mb4
-  COLLATE utf8mb4_unicode_ci;
-
-USE namoro_db;
+-- (O banco de dados será o padrão fornecido pela hospedagem, ex: defaultdb)
 
 -- ============================================
 -- TABELA: usuarios
