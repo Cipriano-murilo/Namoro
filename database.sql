@@ -72,10 +72,10 @@ CREATE TABLE IF NOT EXISTS sessoes (
 INSERT INTO usuarios (nome, username, senha_hash) VALUES
 -- Senha: amor25
 ('Murilo', 'murilo',
- '$2y$10$mefvScaeLapDPSUNoNJ3wuADIcwz7sa2WyKbVpiXgoKFPUDVSCx6m'),
+ '$2b$10$OUiJBPcS9xBGjqRCrjp/ueJumP.29z8HEB/ririN/My9zRg3MkfBG'),
 -- Senha: amor25
 ('Maria Luiza', 'marialuiza',
- '$2y$10$mefvScaeLapDPSUNoNJ3wuADIcwz7sa2WyKbVpiXgoKFPUDVSCx6m');
+ '$2b$10$OUiJBPcS9xBGjqRCrjp/ueJumP.29z8HEB/ririN/My9zRg3MkfBG');
 
 -- ============================================
 -- VIEWS úteis

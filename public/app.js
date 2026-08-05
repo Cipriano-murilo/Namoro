@@ -6,12 +6,13 @@ const API_BASE = 'api'; // Caminho relativo para os endpoints PHP
 
 // ── Estado global ──
 const state = {
-  usuario: null,       // Usuário logado
-  fotos: [],           // Lista de fotos
-  sentimentos: [],     // Lista de sentimentos
+  usuario: null,
+  fotos: [],
+  sentimentos: [],
   emojiSelecionado: '💕',
   arquivoSelecionado: null,
   timerInterval: null,
+  pollingInterval: null,
 };
 
 // ── Data de início do namoro ──
@@ -216,6 +217,7 @@ function entrarNoDashboard() {
   iniciarCronometro();
   carregarFotos();
   carregarSentimentos();
+  iniciarPolling();
   criarParticulas();
 
   // Logout
@@ -226,6 +228,8 @@ async function logout() {
   try { await api('logout'); } catch {}
   state.usuario = null;
   clearInterval(state.timerInterval);
+  clearInterval(state.pollingInterval);
+  state.pollingInterval = null;
 
   document.getElementById('screen-dashboard').style.display = 'none';
   document.getElementById('screen-dashboard').classList.remove('active');
@@ -484,6 +488,23 @@ async function carregarSentimentos() {
   }
 }
 
+// Atualiza mensagens automaticamente a cada 5 segundos
+function iniciarPolling() {
+  if (state.pollingInterval) clearInterval(state.pollingInterval);
+  state.pollingInterval = setInterval(async () => {
+    try {
+      const data = await api('sentimentos?limit=50');
+      // Só re-renderiza se houver mudança (evita piscar a tela)
+      const idsNovos = data.sentimentos.map(s => s.id).join();
+      const idsAtuais = state.sentimentos.map(s => s.id).join();
+      if (idsNovos !== idsAtuais) {
+        state.sentimentos = data.sentimentos;
+        renderSentimentos();
+      }
+    } catch { /* silencioso */ }
+  }, 5000);
+}
+
 function renderSentimentos() {
   const feed = document.getElementById('feelings-feed');
   if (!state.sentimentos.length) {
@@ -539,9 +560,11 @@ function escapeHtml(str) {
 
 function formatarDataSimples(iso) {
   if (!iso) return '';
-  const d = new Date(iso);
-  return d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' }) +
-         ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  // Garante que a string seja tratada como UTC (adiciona 'Z' se necessário)
+  const isoUtc = iso.endsWith('Z') || iso.includes('+') ? iso : iso + 'Z';
+  const d = new Date(isoUtc);
+  return d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', timeZone: 'America/Sao_Paulo' }) +
+         ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Sao_Paulo' });
 }
 
 // ============================================
