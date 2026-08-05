@@ -1,8 +1,3 @@
--- ============================================
--- BANCO DE DADOS: Site de Namoro
--- Data início do relacionamento: 08/03/2025
--- ============================================
-
 CREATE DATABASE IF NOT EXISTS namoro_db
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_ci;

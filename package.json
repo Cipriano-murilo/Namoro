@@ -1,0 +1,33 @@
+{
+  "name": "namoro",
+  "version": "1.0.0",
+  "description": "Site privado do casal com cronômetro, galeria de fotos e diário de sentimentos.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node src/server.js",
+    "start": "node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cipriano-murilo/Namoro.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Cipriano-murilo/Namoro/issues"
+  },
+  "homepage": "https://github.com/Cipriano-murilo/Namoro#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cloudinary": "^1.41.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "multer": "^2.2.0",
+    "multer-storage-cloudinary": "^4.0.0",
+    "mysql2": "^3.23.1"
+  }
+}

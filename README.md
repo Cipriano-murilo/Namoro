@@ -4,11 +4,22 @@ Site privado do casal com cronômetro, galeria de fotos e diário de sentimentos
 
 ---
 
+## 🛠️ Tecnologias Utilizadas
+
+- **Frontend:** HTML5, CSS3 Vanilla, JavaScript (Vanilla)
+- **Backend:** Node.js, Express
+- **Banco de Dados:** MySQL (mysql2)
+- **Design:** Glassmorphism, CSS Animations, Dark Mode romântico
+- **Segurança:** Bcrypt, Cookies HTTP-Only, JWT/Tokens de Sessãoo
+
+---
+
 ## 📋 Pré-requisitos
 
 - **XAMPP** ou **WAMP** instalado e rodando
 - **MySQL Workbench** (para importar o banco de dados)
 - Navegador moderno (Chrome, Firefox, Edge)
+- **Node.js** instalado
 
 ---
 
@@ -28,7 +39,7 @@ C:\xampp\htdocs\Namoro\
 2. Conecte ao servidor local (`localhost`, porta `3306`)
 3. Vá em **File → Open SQL Script**
 4. Selecione o arquivo `database.sql` desta pasta
-5. Execute o script (botão ⚡ ou `Ctrl+Shift+Enter`)
+5. Execute o script (botao ⚡ ou `Ctrl+Shift+Enter`)
 
 Isso vai criar:
 - O banco de dados `namoro_db`
@@ -146,6 +157,13 @@ Em `index.html`, altere o título e o nome "Nosso Amor" para o nome que preferir
 
 ## 🚀 Como Rodar o Site
 
-1. Abra o **XAMPP Control Panel**.
-2. Dê **Start** no **Apache** e no **MySQL**.
-3. Abra o navegador e acesse: `http://localhost/Namoro/`
+1. Abra o **XAMPP Control Panel** e dê **Start** no **MySQL** (não precisa do Apache).
+2. Abra o terminal na pasta do projeto e instale as dependências:
+   ```bash
+   npm install
+   ```
+3. Inicie o servidor Node.js:
+   ```bash
+   npm run dev
+   ```
+4. Abra o navegador e acesse: `http://localhost:3000/`
