@@ -30,12 +30,17 @@ function showToast(msg, tipo = 'success') {
   setTimeout(() => { el.className = 'toast'; }, 3500);
 }
 
-/** Chamada à API PHP */
+/** Chamada à API */
 async function api(endpoint, opts = {}) {
   const url = `${API_BASE}/${endpoint}`;
+  const token = localStorage.getItem('namoro_token');
+  const headers = { 'Content-Type': 'application/json', ...(opts.headers || {}) };
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
   const res = await fetch(url, {
-    credentials: 'include',
-    headers: { 'Content-Type': 'application/json', ...(opts.headers || {}) },
+    headers,
     ...opts,
   });
   const data = await res.json().catch(() => ({}));
@@ -97,17 +102,25 @@ function calcularTempo() {
   const totalHoras= Math.floor(totalMin / 60);
   const totalDias = Math.floor(totalHoras / 24);
 
-  // Calcular anos e meses "calendário"
+  // Calcular anos, meses e dias exatos
   const inicio = INICIO_NAMORO;
-  let anos  = agora.getFullYear() - inicio.getFullYear();
-  let meses = agora.getMonth()    - inicio.getMonth();
-  if (meses < 0) { anos--; meses += 12; }
+  let anos = agora.getFullYear() - inicio.getFullYear();
+  let meses = agora.getMonth() - inicio.getMonth();
+  let dias = agora.getDate() - inicio.getDate();
 
-  // Dias restantes após meses cheios
-  const refData = new Date(inicio);
-  refData.setFullYear(refData.getFullYear() + anos);
-  refData.setMonth(refData.getMonth() + meses);
-  const diasRestantes = Math.floor((agora - refData) / (1000 * 60 * 60 * 24));
+  if (dias < 0) {
+    meses--;
+    // Pega o último dia do mês anterior para emprestar os dias
+    const ultimoDiaMesAnterior = new Date(agora.getFullYear(), agora.getMonth(), 0).getDate();
+    dias += ultimoDiaMesAnterior;
+  }
+
+  if (meses < 0) {
+    anos--;
+    meses += 12;
+  }
+
+  const diasRestantes = dias;
 
   const horas   = agora.getHours();
   const minutos = agora.getMinutes();
@@ -169,6 +182,7 @@ function initLogin() {
         body: JSON.stringify({ username, senha }),
       });
 
+      localStorage.setItem('namoro_token', data.token);
       state.usuario = data.usuario;
       entrarNoDashboard();
     } catch (ex) {
@@ -226,6 +240,7 @@ function entrarNoDashboard() {
 
 async function logout() {
   try { await api('logout'); } catch {}
+  localStorage.removeItem('namoro_token');
   state.usuario = null;
   clearInterval(state.timerInterval);
   clearInterval(state.pollingInterval);
@@ -312,10 +327,13 @@ function initFotos() {
     document.getElementById('upload-progress').style.display = 'block';
     document.getElementById('progress-fill').style.width = '60%';
 
+    const token = localStorage.getItem('namoro_token');
+    if (token) fd.append('token', token); // caso queira enviar via POST, mas enviaremos no header
+
     try {
       const data = await fetch(`${API_BASE}/fotos`, {
         method: 'POST',
-        credentials: 'include',
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {},
         body: fd,
       }).then(r => r.json());
 

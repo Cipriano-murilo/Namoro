@@ -42,7 +42,8 @@ router.post('/login', async (req, res) => {
       maxAge: SESSION_DURATION,
       httpOnly: true,
       path: '/',
-      sameSite: 'Lax'
+      sameSite: 'Lax',
+      secure: process.env.NODE_ENV === 'production' // HTTPS no Render
     });
 
     res.json({
@@ -89,7 +90,12 @@ router.get('/me', async (req, res) => {
 
 // Middleware de autenticação para exportar e usar em outras rotas
 router.requireAuth = async (req, res, next) => {
-  const token = req.cookies[COOKIE_NAME];
+  let token = req.cookies[COOKIE_NAME];
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    token = authHeader.split(' ')[1];
+  }
+
   if (!token) return jsonErr(res, 'Não autenticado', 401);
 
   try {
