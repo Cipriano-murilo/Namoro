@@ -406,6 +406,8 @@ async function carregarFotos() {
 
 function renderFotos() {
   const grid = document.getElementById('photos-grid');
+  grid.innerHTML = '';
+  
   if (!state.fotos.length) {
     grid.innerHTML = `
       <div class="photos-empty">
@@ -415,17 +417,47 @@ function renderFotos() {
     return;
   }
 
-  grid.innerHTML = state.fotos.map(foto => `
-    <div class="photo-card" data-id="${foto.id}">
-      <img src="${escapeHtml(foto.url)}" alt="${escapeHtml(foto.descricao || foto.nome_original)}" loading="lazy"
-           onclick="abrirLightbox('${escapeHtml(foto.url)}', '${escapeHtml(foto.descricao || foto.nome_original)}')" />
-      <button class="btn-delete-photo" onclick="deletarFoto(${foto.id})" aria-label="Remover foto" title="Remover">🗑️</button>
-      <div class="photo-card-overlay">
-        ${foto.descricao ? `<p class="photo-card-desc">${escapeHtml(foto.descricao)}</p>` : ''}
-        <p class="photo-card-meta">📸 ${escapeHtml(foto.enviado_por)} · ${formatarDataSimples(foto.criado_em)}</p>
-      </div>
-    </div>
-  `).join('');
+  state.fotos.forEach(foto => {
+    const card = document.createElement('div');
+    card.className = 'photo-card';
+    card.dataset.id = foto.id;
+
+    const img = document.createElement('img');
+    img.src = foto.url;
+    img.alt = foto.descricao || foto.nome_original;
+    img.loading = 'lazy';
+    img.style.cursor = 'pointer'; // Deixa claro que é clicável
+    img.addEventListener('click', () => abrirLightbox(foto.url, foto.descricao || foto.nome_original));
+
+    const btnDel = document.createElement('button');
+    btnDel.className = 'btn-delete-photo';
+    btnDel.setAttribute('aria-label', 'Remover foto');
+    btnDel.title = 'Remover';
+    btnDel.innerHTML = '🗑️';
+    // Opcional: Garante que o botão fique na frente
+    btnDel.style.zIndex = '10';
+    btnDel.addEventListener('click', (e) => {
+      e.stopPropagation();
+      deletarFoto(foto.id);
+    });
+
+    const overlay = document.createElement('div');
+    overlay.className = 'photo-card-overlay';
+    
+    let descHtml = '';
+    if (foto.descricao) {
+      descHtml = `<p class="photo-card-desc">${escapeHtml(foto.descricao)}</p>`;
+    }
+    overlay.innerHTML = `
+      ${descHtml}
+      <p class="photo-card-meta">📸 ${escapeHtml(foto.enviado_por)} · ${formatarDataSimples(foto.criado_em)}</p>
+    `;
+
+    card.appendChild(img);
+    card.appendChild(btnDel);
+    card.appendChild(overlay);
+    grid.appendChild(card);
+  });
 }
 
 async function deletarFoto(id) {
