@@ -630,13 +630,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0;
+  opacity: 1;
   transition: all 0.2s;
   font-size: 0.85rem;
-}
-
-.photo-card:hover .btn-delete-photo {
-  opacity: 1;
 }
 
 .btn-delete-photo:hover {
@@ -880,11 +876,10 @@ body {
   cursor: pointer;
   padding: 4px 6px;
   border-radius: 6px;
-  opacity: 0;
+  opacity: 1;
   transition: all 0.15s;
 }
 
-.feeling-bubble:hover .btn-delete-feeling { opacity: 1; }
 .btn-delete-feeling:hover { color: var(--coral); background: rgba(255,107,107,0.1); }
 
 .feelings-empty {

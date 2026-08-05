@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
   const limit = Math.min(parseInt(req.query.limit) || 50, 100);
   
   try {
-    const [rows] = await db.execute('SELECT * FROM v_sentimentos LIMIT ?', [limit]);
+    const [rows] = await db.query(`SELECT * FROM v_sentimentos LIMIT ${limit}`);
     res.json({ ok: true, sentimentos: rows });
   } catch (error) {
     console.error(error);
