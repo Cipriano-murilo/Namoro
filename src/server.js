@@ -1,6 +1,5 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
 
@@ -11,24 +10,25 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true
-}));
 
-// Servir arquivos estáticos do frontend
+// Servir arquivos estáticos do frontend (pasta public)
 app.use(express.static(path.join(__dirname, '../public')));
 
 // Rotas da API
-const authRoutes = require('./routes/auth');
-const fotosRoutes = require('./routes/fotos');
+const authRoutes       = require('./routes/auth');
+const fotosRoutes      = require('./routes/fotos');
 const sentimentosRoutes = require('./routes/sentimentos');
 
 app.use('/api', authRoutes);
 app.use('/api/fotos', fotosRoutes);
 app.use('/api/sentimentos', sentimentosRoutes);
 
-// Fallback para SPA ou páginas não encontradas
+// Rota de health check (para debug)
+app.get('/api/health', (req, res) => {
+  res.json({ ok: true, message: 'Servidor no ar!', env: process.env.NODE_ENV || 'development' });
+});
+
+// Fallback — retorna o index.html para qualquer rota não-API (SPA)
 app.use((req, res, next) => {
   if (req.method === 'GET' && !req.path.startsWith('/api')) {
     res.sendFile(path.join(__dirname, '../public/index.html'));
@@ -39,7 +39,7 @@ app.use((req, res, next) => {
 
 // Tratamento de erros global
 app.use((err, req, res, next) => {
-  console.error(err.stack);
+  console.error('ERRO GLOBAL:', err.stack);
   res.status(500).json({ ok: false, error: 'Ocorreu um erro interno no servidor.' });
 });
 
@@ -47,4 +47,5 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`🚀 Servidor rodando na porta ${PORT}`);
   console.log(`👉 Acesse: http://localhost:${PORT}`);
+  console.log(`🌍 Ambiente: ${process.env.NODE_ENV || 'development'}`);
 });
